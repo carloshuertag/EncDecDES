@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <title>Encrypt/Decrypt</title>
+    <script src="/encryptDecrypt.js"></script>
+    <script src="/js/bootstrap.js"></script>
+</head>
+
+<body class="bg-dark text-secondary">
+    <main class="px-4 py-5 text-center">
+        <div class="py-5">
+            <h1 class="display-5 fw-bold text-white">Encrypt/Decrypt .txt files</h1>
+            <div class="col-lg-6 mx-auto">
+                <p class="fs-5 mb-4">Upload .txt files and give a secret key to encrypt or decrypt to download a .txt file with the result.</p>
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <button type="button" class="btn btn-info btn-lg px-4 me-sm-3 fw-bold" data-bs-toggle="modal" data-bs-target="#encryptModal">Encrypt .txt file</button>
+                    <button type="button" class="btn btn-outline-info btn-lg px-4 fw-bold" data-bs-toggle="modal" data-bs-target="#decryptModal">Decrypt .txt file</button>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="encryptModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="encryptModalL" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="encryptModalL">Encrypt .txt file</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="encrypt" action="/encrypt_decrypt/encrypt" enctype="multipart/form-data" method="post">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="eSecretKeyL">Secret Key</span>
+                                <input type="text" class="form-control" id="eSecretKey" name="eSecretKey" aria-label="Secret key (Max 8 characters)" aria-describedby="eSecretKeyL" required maxlength="8">
+                            </div>
+                            <div class="input-group mb-3">
+                                <button class="btn btn-info" type="submit" id="encrpytFileL">Encrypt</button>
+                                <input type="file" class="form-control" id="encryptFile" name="encryptFile" aria-describedby="encrpytFileL" aria-label="Upload" required>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="decryptModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="decryptModalL" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="decryptModalL">Decrypt .txt file</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="decrypt" action="/encrypt_decrypt/decrypt" enctype="multipart/form-data" method="post">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="dSecretKeyL">Secret Key</span>
+                                <input type="text" class="form-control" id="dSecretKey" name="dSecretKey" aria-label="Secret key (Max 8 characters)" aria-describedby="dSecretKeyL" required maxlength="8">
+                            </div>
+                            <div class="input-group mb-3">
+                                <button class="btn btn-info" type="submit" id="decryptFileL">Decrypt</button>
+                                <input type="file" class="form-control" id="decryptFile" name="decryptFile" aria-describedby="decryptFileL" aria-label="Upload" required>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+</body>
+
+</html
