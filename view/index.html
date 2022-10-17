@@ -30,10 +30,10 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="encrypt" action="/encrypt_decrypt/encrypt" enctype="multipart/form-data" method="post">
+                        <form id="encrypt" action="/encrypt_decrypt/encrypt" enctype="multipart/form-data" method="post" autocomplete="off">
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="eSecretKeyL">Secret Key</span>
-                                <input type="text" class="form-control" id="eSecretKey" name="eSecretKey" aria-label="Secret key (Max 8 characters)" aria-describedby="eSecretKeyL" required maxlength="8">
+                                <input type="text" class="form-control" id="eSecretKey" name="eSecretKey" aria-label="Secret key (Max 8 characters)" aria-describedby="eSecretKeyL" required maxlength="8" autocomplete="false">
                             </div>
                             <div class="input-group mb-3">
                                 <button class="btn btn-info" type="submit" id="encrpytFileL">Encrypt</button>
@@ -52,10 +52,10 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="decrypt" action="/encrypt_decrypt/decrypt" enctype="multipart/form-data" method="post">
+                        <form id="decrypt" action="/encrypt_decrypt/decrypt" enctype="multipart/form-data" method="post" autocomplete="off">
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="dSecretKeyL">Secret Key</span>
-                                <input type="text" class="form-control" id="dSecretKey" name="dSecretKey" aria-label="Secret key (Max 8 characters)" aria-describedby="dSecretKeyL" required maxlength="8">
+                                <input type="text" class="form-control" id="dSecretKey" name="dSecretKey" aria-label="Secret key (Max 8 characters)" aria-describedby="dSecretKeyL" required maxlength="8" autocomplete="false">
                             </div>
                             <div class="input-group mb-3">
                                 <button class="btn btn-info" type="submit" id="decryptFileL">Decrypt</button>

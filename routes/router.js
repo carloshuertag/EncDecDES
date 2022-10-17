@@ -5,7 +5,7 @@ import { readFile } from "node:fs";
 const multerConfig = { // multipart/form-data enctypes
     storage: multer.diskStorage({
         destination: (request, file, next) => {
-            next(null, './view/tmp');
+            next(null, './tmp');
         },
         filename: (request, file, next) => {
             const ext = file.originalname.substring(file.originalname.lastIndexOf('.') + 1);
@@ -35,7 +35,7 @@ router.post('/encrypt', (request, response) => {
             response.status(500).end();
         }
         if (request.body.secretKey) {
-            readFile('./view/tmp/plainText.txt', (err, data) => {
+            readFile('./tmp/plainText.txt', (err, data) => {
                 if (err) throw err;
                 let plainText = data.toString();
                 console.log("Plain Text: ", plainText);
@@ -62,7 +62,7 @@ router.post('/decrypt', (request, response) => {
             response.status(500).end();
         }
         if (request.body.secretKey) {
-            readFile('./view/tmp/encrypted.txt', (err, data) => {
+            readFile('./tmp/encrypted.txt', (err, data) => {
                 if (err) throw err;
                 let encrypted = data.toString();
                 console.log("Encrypted: ", encrypted);
