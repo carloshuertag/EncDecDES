@@ -5,9 +5,18 @@ window.addEventListener('load', () => {
         event.preventDefault();
         let formData = new FormData();
         const fileName = encryptForm.elements.encryptFile.files[0].name;
-        formData.append('plainText', encryptForm.elements.encryptFile.files[0]);
+        const fileType = encryptForm.elements.encryptFile.files[0].type;
+        const isImage = fileType.startsWith('image');
+        if (isImage) {
+            let algorithm = 'des';
+            if (encryptForm.elements.eMode.value != 'ECB')
+                algorithm += '-' + encryptForm.elements.eMode.value;
+            formData.append('algorithm', algorithm);
+            formData.append('iv', encryptForm.elements.eIV.value);
+        }
+        formData.append(isImage ? 'image' : 'plainText', encryptForm.elements.encryptFile.files[0]);
         formData.append('secretKey', encryptForm.elements.eSecretKey.value);
-        fetch('/encrypt_decrypt/encrypt', {
+        fetch(isImage ? '/encrypt_decrypt/encryptImage' : '/encrypt_decrypt/encrypt', {
             method: 'POST',
             body: formData,
         }).then((response) => {
@@ -23,7 +32,8 @@ window.addEventListener('load', () => {
             if (suffix.startsWith('_D'))
                 newFileName = fileName.substring(0, aux++ - 2) + '_C.';
             else newFileName = fileName.substring(0, aux++) + '_C.';*/
-            const newFileName = fileName.substring(0, aux++) + '_C.';
+            let newFileName = fileName.substring(0, aux++);
+            newFileName += '_e' + encryptForm.elements.eMode.value.toUpperCase() + '.';
             anchor.download = newFileName + fileName.substring(aux);
             anchor.click();
             window.URL.revokeObjectURL(url);
@@ -34,9 +44,18 @@ window.addEventListener('load', () => {
         event.preventDefault();
         let formData = new FormData();
         const fileName = decryptForm.elements.decryptFile.files[0].name;
-        formData.append('encrypted', decryptForm.elements.decryptFile.files[0]);
+        const fileType = decryptForm.elements.decryptFile.files[0].type;
+        const isImage = fileType.startsWith('image');
+        if (isImage) {
+            let algorithm = 'des';
+            if (decryptForm.elements.dMode.value != 'ECB')
+                algorithm += '-' + decryptForm.elements.dMode.value;
+            formData.append('algorithm', algorithm);
+            formData.append('iv', decryptForm.elements.dIV.value);
+        }
+        formData.append(isImage ? 'encryptedImage' : 'encrypted', decryptForm.elements.decryptFile.files[0]);
         formData.append('secretKey', decryptForm.elements.dSecretKey.value);
-        fetch('/encrypt_decrypt/decrypt', {
+        fetch(isImage ? '/encrypt_decrypt/decryptImage' : '/encrypt_decrypt/decrypt', {
             method: 'POST',
             body: formData,
         }).then((response) => {
@@ -52,7 +71,8 @@ window.addEventListener('load', () => {
             if (suffix.startsWith('_C'))
                 newFileName = fileName.substring(0, aux++ - 2) + '_D.';
             else newFileName = fileName.substring(0, aux++) + '_D.';*/
-            const newFileName = fileName.substring(0, aux++) + '_D.';
+            let newFileName = fileName.substring(0, aux++);
+            newFileName += '_d' + decryptForm.elements.dMode.value.toUpperCase() + '.';
             anchor.download = newFileName + fileName.substring(aux);
             anchor.click();
             window.URL.revokeObjectURL(url);
