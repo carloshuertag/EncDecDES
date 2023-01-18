@@ -60,7 +60,10 @@ window.addEventListener('load', () => {
             body: formData,
         }).then((response) => {
             if (response.ok) return response.blob();
-            else throw new Error('Error in network response.');
+            else {
+                if (response.status == 401) alert('Decryption failed. Wrong parameters.');
+                throw new Error('Error in network response.');
+            }
         }).then((blob) => {
             let url = window.URL.createObjectURL(blob),
                 anchor = document.createElement("a");

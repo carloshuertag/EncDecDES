@@ -38,11 +38,9 @@ router.post('/encrypt', (request, response) => {
             readFile('./tmp/plainText.txt', (err, data) => {
                 if (err) throw err;
                 let plainText = data.toString();
-                console.log("Plain Text: ", plainText);
                 const secretKey = request.body.secretKey.substring(0, 8);
-                console.log("Secret Key: ", secretKey);
                 let encrypted = encrypt(plainText, secretKey);
-                console.log("Encrypted: ", encrypted);
+                console.log("Encrypted");
                 response.set({
                     "Content-Disposition": 'attachment; filename="encrypted.txt"',
                     "Content-Type": "text/plain"
@@ -71,8 +69,6 @@ router.post('/encryptImage', (request, response) => {
                 const secretKey = request.body.secretKey.substring(0, 8);
                 const ivString = request.body.iv.substring(0, 8);
                 const initializationVector = Buffer.from(ivString, 'utf8');
-                console.log("Secret Key: ", secretKey);
-                console.log("Initialization Vector: ", ivString);
                 console.log("Algorithm: ", algorithm);
                 let encrypted = encryptBuffer(plain, algorithm, initializationVector, secretKey);
                 const encryptedImage = Buffer.concat([bmpHeader, encrypted]);
@@ -102,10 +98,9 @@ router.post('/decrypt', (request, response) => {
             readFile('./tmp/encrypted.txt', (err, data) => {
                 if (err) throw err;
                 let encrypted = data.toString();
-                console.log("Encrypted: ", encrypted);
                 const secretKey = request.body.secretKey.substring(0, 8);
                 let plainText = decrypt(encrypted, secretKey);
-                console.log("Plain text: ", plainText);
+                console.log("Decrypted")
                 response.set({
                     "Content-Disposition": 'attachment; filename="plainText.txt"',
                     "Content-Type": "text/plain"
@@ -126,20 +121,29 @@ router.post('/decryptImage', (request, response) => {
         }
         if (request.body.secretKey && request.body.iv && request.body.algorithm) {
             readFile('./tmp/encryptedImage.bmp', (err, data) => {
-                if (err) throw err;
+                if (err) {
+                    console.log("Error reading encrypted image.");
+                    response.status(500).end();
+                }
                 const bmpHeader = data.subarray(0, 54);
                 const encrypted = data.subarray(54);
                 const algorithm = request.body.algorithm || 'des';
                 const secretKey = request.body.secretKey.substring(0, 8);
                 const ivString = request.body.iv.substring(0, 8);
                 const initializationVector = Buffer.from(ivString, 'utf8');
-                let plain = decryptBuffer(encrypted, algorithm, initializationVector, secretKey);
-                const plainImage = Buffer.concat([bmpHeader, plain]);
-                response.set({
-                    "Content-Disposition": 'attachment; filename="plainImage.*"',
-                    "Content-Type": "image/*"
-                });
-                response.status(200).send(plainImage).end();
+                try {
+                    let plain = decryptBuffer(encrypted, algorithm, initializationVector, secretKey);
+                    const plainImage = Buffer.concat([bmpHeader, plain]);
+                    console.log("Decrypted")
+                    response.set({
+                        "Content-Disposition": 'attachment; filename="plainImage.*"',
+                        "Content-Type": "image/*"
+                    });
+                    response.status(200).send(plainImage).end();
+                } catch (err) {
+                    console.log("Error decrypting image.");
+                    response.status(401).end();
+                }
             });
         } else response.status(400).end();
     });
